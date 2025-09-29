@@ -27,6 +27,7 @@ export default tseslint.config(
       ...tseslint.configs.recommended.rules,
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: true }],
+      '@stylistic/max-statements-per-line': ['error', { max: 2 }],
       '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',

@@ -6,7 +6,7 @@ export class Tabin {
   public static getSavedUrls(): Promise<string[]> {
     return new Promise((resolve): void => {
       chrome.storage.local.get('tabin_urls', (res): void => {
-        const urls = res.tabin_urls as string[] || [];
+        const urls = res.tabin_urls as string[] ?? [];
         resolve(urls);
       });
     });
@@ -24,7 +24,7 @@ export class Tabin {
     return new Promise((resolve): void => {
       chrome.tabs.getAllInWindow((tabs: chrome.tabs.Tab[]): void => {
         const urls: string[] = tabs
-          .filter((tab): tab is { url: string } & typeof tab => tab.url !== undefined)
+          .filter((tab): tab is { url: string } & typeof tab => tab.url != null)
           .map(({ url }) => url);
         resolve(urls);
       });
@@ -36,7 +36,7 @@ export class Tabin {
       const new_urls: string[] = [...new Set(urls)];
 
       if (urls.length == new_urls.length) {
-        chrome.storage.local.set({ tabin_urls: new_urls }, () => {
+        chrome.storage.local.set({ tabin_urls: new_urls }, (): void => {
           resolve(new_urls);
         });
       } else {
@@ -52,30 +52,18 @@ export class Tabin {
   }
 
   public static notify(title: string, message: string): void {
-    chrome.notifications.create({
-      title: title,
-      message: message,
-      type: 'basic',
-      iconUrl: 'icon48.png',
-    }, (_notificationId: string): void => {
-      setTimeout(() => {
-        chrome.notifications.clear(_notificationId, (_wasCleared: boolean): void => { /* noop */ });
-      }, 3000);
-    });
+    chrome.notifications.create(
+      { title: title, message: message, type: 'basic', iconUrl: 'icon48.png' },
+      (notificationId: string): void => {
+        setTimeout((): void => {
+          chrome.notifications.clear(notificationId, (_wasCleared: boolean): void => { /* noop */ });
+        }, 3000);
+      },
+    );
   }
 
   public static extractTabUrl(tab?: chrome.tabs.Tab): string {
-    if (tab == null) {
-      throw new Error('tab is null');
-    }
-
-    const url = tab.url;
-
-    if (url == null) {
-      throw new Error('url is null');
-    }
-
-    return url;
+    return tab?.url ?? ((): string => { throw new Error('url is missing'); })();
   }
 
   public static updateBadge(urls: string[]): void {
