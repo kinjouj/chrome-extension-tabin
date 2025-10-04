@@ -4,10 +4,6 @@ const TABIN_CTX_MENU_SAVE_ALL = 'tabin_ctx_menu_save_all';
 const TABIN_CTX_MENU_SAVE = 'tabin_ctx_menu_save';
 const TABIN_CTX_MENU_CLEAR = 'tabin_ctx_menu_clear';
 
-Tabin.getSavedUrls().then((urls: string[]): void => {
-  Tabin.updateBadge(urls);
-}).catch(noop);
-
 chrome.runtime.onInstalled.addListener((): void => {
   chrome.contextMenus.create({
     id: TABIN_CTX_MENU_SAVE_ALL,
@@ -21,6 +17,8 @@ chrome.runtime.onInstalled.addListener((): void => {
     id: TABIN_CTX_MENU_CLEAR,
     title: '保管したタブをクリア',
   });
+
+  Tabin.getSavedUrls().then((urls: string[]): void => { Tabin.updateBadge(urls); }).catch(noop);
 });
 
 chrome.browserAction.onClicked.addListener((): void => {
