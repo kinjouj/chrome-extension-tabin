@@ -2,7 +2,7 @@
   "name": "chrome-extension-tabin",
   "version": "0.0.1",
   "scripts": {
-    "build": "tsc --noEmit && npx eslint && vite build"
+    "build": "tsc && npx eslint && vite build"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.2.3",
