@@ -23,7 +23,7 @@ chrome.runtime.onInstalled.addListener((): void => {
 
 chrome.browserAction.onClicked.addListener((): void => {
   Tabin.getSavedUrls().then((urls: string[]): void => {
-    urls.forEach(url => chrome.tabs.create({ url: url }, noop));
+    urls.forEach((url) => chrome.tabs.create({ url: url }, noop));
   }).catch(noop);
 });
 
@@ -32,7 +32,7 @@ chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData
     case TABIN_CTX_MENU_SAVE_ALL: {
       Tabin.getTabUrls().then((urls: string[]): void => {
         Tabin.save(urls).then((): void => {
-          urls.forEach(url => Tabin.notify('SAVE', `SAVE: ${url}`));
+          urls.forEach((url) => Tabin.notify('SAVE', `SAVE: ${url}`));
           Tabin.updateBadge(urls);
         }).catch(noop);
       }).catch(noop);
@@ -42,7 +42,7 @@ chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData
     case TABIN_CTX_MENU_SAVE: {
       const url = Tabin.extractTabUrl(tab);
       Tabin.getSavedUrls().then((urls: string[]): void => {
-        Tabin.save([...urls, url]).then((new_urls: string[]): void => {
+        Tabin.save([ ...urls, url ]).then((new_urls: string[]): void => {
           Tabin.notify('SAVE', `SAVE: ${url}`);
           Tabin.updateBadge(new_urls);
         }).catch(noop);
@@ -53,7 +53,9 @@ chrome.contextMenus.onClicked.addListener((info: chrome.contextMenus.OnClickData
 
     case TABIN_CTX_MENU_CLEAR: {
       Tabin.count().then((count: number): void => {
-        if (count <= 0) return;
+        if (count <= 0) {
+          return;
+        }
 
         Tabin.clear().then((): void => {
           Tabin.notify('CLEAR', `${count} cleared`);

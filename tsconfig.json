@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.tsbuildinfo",
     "noEmit": true,
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
     "target": "es2022",
-    "module": "Preserve",
+    "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
-    "types": ["chrome"]
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*"]
 }
